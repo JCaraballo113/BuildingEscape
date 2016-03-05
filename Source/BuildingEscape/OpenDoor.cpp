@@ -21,8 +21,16 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	//Get the Owner
+	Owner = GetOwner();
+
+	//Get the actor that opens the door
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn(); //The controller is the 'Mind' the Pawn is the 'Body' which is what I want
 	
+}
+
+void UOpenDoor::TriggerDoor(float direction) {
+	Owner->SetActorRotation(FRotator(0.0f, direction, 0.0f));
 }
 
 
@@ -31,6 +39,13 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	// ...
+	if (DoorTrigger->IsOverlappingActor(ActorThatOpens)) {
+		TriggerDoor(OpenAngle);
+		DoorLastOpen = GetWorld()->GetTimeSeconds();
+	}
+
+	if (GetWorld()->GetTimeSeconds() - DoorLastOpen > DoorDelay) {
+		TriggerDoor(CloseAngle);
+	}
 }
 
