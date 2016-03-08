@@ -24,6 +24,7 @@ public:
 
 private:
 	// How far ahead of the player can we reach
+	UPROPERTY(EditAnywhere)
 	float GrabDistance = 100.0f;
 		
 	
