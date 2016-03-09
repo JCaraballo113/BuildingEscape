@@ -26,6 +26,15 @@ private:
 	// How far ahead of the player can we reach
 	UPROPERTY(EditAnywhere)
 	float GrabDistance = 100.0f;
-		
 	
+	UPROPERTY(VisibleAnywhere)
+	UPhysicsHandleComponent* PhysicHandle = nullptr;
+
+	UInputComponent* InputComponent = nullptr;
+	
+	// Method used to execute code when grab key pressed
+	void Grab();
+
+	// Method used to execute code when grab key released
+	void Released();
 };
