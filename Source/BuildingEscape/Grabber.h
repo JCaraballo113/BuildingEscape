@@ -28,7 +28,7 @@ private:
 	float GrabDistance = 100.0f;
 	
 	UPROPERTY(VisibleAnywhere)
-	UPhysicsHandleComponent* PhysicHandle = nullptr;
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
 	
@@ -37,4 +37,7 @@ private:
 
 	// Method used to execute code when grab key released
 	void Released();
+
+	// Method for simple testing, logs a warning about missing component
+	void LogMissing(FString ComponentReq);
 };

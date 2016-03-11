@@ -24,33 +24,30 @@ void UGrabber::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
 
-	// Find (assumed) attatched Physics Handle Component
-	auto ComponentFound = GetOwner()->GetComponentByClass(UPhysicsHandleComponent::StaticClass());
-	if(ComponentFound)
+	// Look for attatched Physics Handle Component
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+
+	if (PhysicsHandle)
 	{
-		// Down-cast to the UPhysicsHandle
-		PhysicHandle = Cast<UPhysicsHandleComponent>(ComponentFound);
+		// Physics Handle is found
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Please attatch a Physics Handle component to: %s"), *GetOwner()->GetName());
+		LogMissing("Physics Handle Component");
 	}
 
-	// Find (assumed) attached Input Component
-	ComponentFound = GetOwner()->GetComponentByClass(UInputComponent::StaticClass());
-	if (ComponentFound)
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+
+	if (InputComponent)
 	{
-		// Down-cast to the UPhysicsHandle
-		InputComponent = Cast<UInputComponent>(ComponentFound);
+		// Input Component found
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Released);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Please attatch an Input Component to: %s"), *GetOwner()->GetName());
+		LogMissing("Input Component");
 	}
-
-	// Bind input actions
-	InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-	InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Released);
 }
 
 
@@ -102,6 +99,11 @@ void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()));
 	}
+}
+
+void UGrabber:: LogMissing(FString ComponentReq)
+{
+	UE_LOG(LogTemp, Warning, TEXT("No %s found. Please attatch one to %s."), *ComponentReq, *GetOwner()->GetName())
 }
 
 void UGrabber:: Grab()
