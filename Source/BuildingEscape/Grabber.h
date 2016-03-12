@@ -31,12 +31,21 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
+
+	// Find attatched Physics Handle Component
+	void FindPhysicsHandleComponent();
+
+	// Setup assumed attached Input Component
+	void SetupInputComponent();
+
+	// Return hit for first physics body in reach
+	const FHitResult GetFirstPhysicsBodyInReach();
 	
 	// Method used to execute code when grab key pressed
 	void Grab();
 
 	// Method used to execute code when grab key released
-	void Released();
+	void Release();
 
 	// Method for simple testing, logs a warning about missing component
 	void LogMissing(FString ComponentReq);
