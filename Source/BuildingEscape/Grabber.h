@@ -17,7 +17,6 @@ public:
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
@@ -26,6 +25,11 @@ private:
 	// How far ahead of the player can we reach
 	UPROPERTY(EditAnywhere)
 	float GrabDistance = 100.0f;
+
+	UPROPERTY(VisibleAnywhere)
+	AActor* ActorHit = nullptr;
+
+	bool Grabbing = false;
 	
 	UPROPERTY(VisibleAnywhere)
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
@@ -47,6 +51,14 @@ private:
 	// Method used to execute code when grab key released
 	void Release();
 
+	// Get a line trace from the player's perspective
+	FVector GetReachLineStart();
+
+	// Get a line trace from the player's perspective
+	FVector GetReachLineEnd();
+
 	// Method for simple testing, logs a warning about missing component
 	void LogMissing(FString ComponentReq);
+
+	void LightUp(AActor* ActorHit, bool Highlight);
 };
