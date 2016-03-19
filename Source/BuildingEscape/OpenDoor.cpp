@@ -3,6 +3,8 @@
 #include "BuildingEscape.h"
 #include "OpenDoor.h"
 
+#define OUT
+
 
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
@@ -24,9 +26,6 @@ void UOpenDoor::BeginPlay()
 	//Get the Owner
 	Owner = GetOwner();
 
-	//Get the actor that opens the door
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn(); //The controller is the 'Mind' the Pawn is the 'Body' which is what I want
-	
 }
 
 void UOpenDoor::TriggerDoor(float direction) {
@@ -39,7 +38,9 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	if (DoorTrigger->IsOverlappingActor(ActorThatOpens)) {
+	//Poll the Volume
+
+	if (GetTotalMass() > 30.0f) {
 		TriggerDoor(OpenAngle);
 		DoorLastOpen = GetWorld()->GetTimeSeconds();
 	}
@@ -49,3 +50,20 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 	}
 }
 
+float UOpenDoor::GetTotalMass()
+{
+	float totalMass = 0.f;
+
+	// Find all overlapping actors
+	TArray<AActor*> OverlappingActors;
+
+	DoorTrigger->GetOverlappingActors(OUT OverlappingActors);
+
+	//Iterate through them adding their masses
+	for(const auto& OverlappingActor : OverlappingActors)
+	{
+		totalMass += OverlappingActor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	}
+
+	return totalMass;
+}
