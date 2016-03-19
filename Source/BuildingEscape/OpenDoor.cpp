@@ -33,8 +33,15 @@ void UOpenDoor::BeginPlay()
 
 }
 
-void UOpenDoor::TriggerDoor(float direction) {
-	Owner->SetActorRotation(FRotator(0.0f, direction, 0.0f));
+void UOpenDoor::OpenDoor() {
+	//Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
+	UE_LOG(LogTemp, Warning, TEXT("Calling Open DOor"))
+	OnOpenRequest.Broadcast();
+}
+
+void UOpenDoor::CloseDoor()
+{
+	Owner->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
 }
 
 
@@ -46,12 +53,14 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 	//Poll the Volume
 
 	if (GetTotalMass() > 30.0f) {
-		TriggerDoor(OpenAngle);
+		OpenDoor();
 		DoorLastOpen = GetWorld()->GetTimeSeconds();
 	}
 
 	if (GetWorld()->GetTimeSeconds() - DoorLastOpen > DoorDelay) {
-		TriggerDoor(CloseAngle);
+		UE_LOG(LogTemp, Warning, TEXT("This shit is getting called"))
+
+		CloseDoor();
 	}
 }
 
