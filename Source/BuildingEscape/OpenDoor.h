@@ -32,13 +32,13 @@ private:
 	float DoorDelay = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* DoorTrigger;
+	ATriggerVolume* DoorTrigger = nullptr;
 		
 	UPROPERTY(VisibleAnywhere)
-	AActor* ActorThatOpens;
+	AActor* ActorThatOpens = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	AActor* Owner;
+	AActor* Owner = nullptr;
 
 	float CloseAngle = 0.0f;
 	float DoorLastOpen = 0.0f;

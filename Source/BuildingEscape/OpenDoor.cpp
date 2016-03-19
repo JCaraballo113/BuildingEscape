@@ -26,6 +26,11 @@ void UOpenDoor::BeginPlay()
 	//Get the Owner
 	Owner = GetOwner();
 
+	if(!DoorTrigger)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Missing Door Trigger Volume"))
+	}
+
 }
 
 void UOpenDoor::TriggerDoor(float direction) {
@@ -57,6 +62,7 @@ float UOpenDoor::GetTotalMass()
 	// Find all overlapping actors
 	TArray<AActor*> OverlappingActors;
 
+	if (!DoorTrigger) { return totalMass; }
 	DoorTrigger->GetOverlappingActors(OUT OverlappingActors);
 
 	//Iterate through them adding their masses
